@@ -4,7 +4,7 @@
 > **Aplicação Nativa Windows Desktop**
 > Este software foi projetado exclusivamente para o sistema operacional Windows, utilizando comandos nativos de rede (`net use`) e interface `pywebview`.
 
-Utilitário desktop para gerenciamento de mapeamentos de rede e organização de projetos (Online/Gaveta), desenvolvido como parte do projeto TADS UNITINS/Anhanguera.
+Utilitário desktop para gerenciamento de mapeamentos de rede e organização de projetos (Online/Gaveta), desenvolvido como parte da Disciplana de Projeto Integrador TADS UNITINS/Anhanguera.
 
 ## 🚀 Sobre o Projeto
 
