@@ -139,9 +139,9 @@ def configurar():
 @role_required(['Gerente'])
 def save_configurar():
     repo = current_app.repo
+    from flask import request
 
     for key, value in request.form.items():
-
         repo.update_setting(key, value)
 
     return redirect(url_for('admin.configurar'))

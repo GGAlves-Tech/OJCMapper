@@ -2,56 +2,46 @@ import secrets
 import os
 import sys
 from flask import Flask
-
-# Domain & Application imports
-from infrastructure.persistence.sqlite_repository import SQLiteRepository
-from infrastructure.system.windows_mapper import WindowsDriveMapper
 from application.auth_service import AuthUseCase
 from application.project_service import ProjectUseCase
 from application.map_service import MapUseCase
 from application.delete_service import DeleteUseCase
+from infrastructure.persistence.sqlite_repository import SQLiteRepository
+from infrastructure.system.windows_mapper import WindowsDriveMapper
 
-
-# Web imports
-from .controllers.home_controller import home_bp
-from .controllers.admin_controller import admin_bp
 from .controllers.auth_controller import auth_bp
 from .controllers.project_controller import project_bp
+from .controllers.admin_controller import admin_bp
 
 def get_resource_path(relative_path):
-    """ Returns absolute path to resource, compatible with PyInstaller """
+    """ Retorna o caminho absoluto para o recurso, compatível com PyInstaller """
     if getattr(sys, 'frozen', False):
+        # PyInstaller cria uma pasta temporária e armazena o caminho em _MEIPASS
         base_path = sys._MEIPASS
     else:
         # File is at src/infrastructure/web/app.py
-        # dirname(__file__) -> src/infrastructure/web
-        # dirname(dirname(__file__)) -> src/infrastructure
-        # dirname(dirname(dirname(__file__))) -> src/
+        # dirname(dirname(dirname(__file__))) reaches src/
         base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
     
     return os.path.join(base_path, relative_path)
 
 def create_app(db_path='database.db'):
-    # Define paths for templates and static files relative to src/
+    # Define os caminhos de templates e estáticos
     template_dir = get_resource_path(os.path.join('infrastructure', 'web', 'templates'))
     static_dir = get_resource_path(os.path.join('infrastructure', 'web', 'static'))
     
     app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
-
-    # Stable secret key for development to avoid logouts on reload
-    if getattr(sys, 'frozen', False):
-        app.secret_key = secrets.token_hex(16)
-    else:
-        app.secret_key = 'dev-secret-key-stable'
+    app.secret_key = secrets.token_hex(16)
     
-    # Register blueprints
+    # Resolve o caminho do banco de dados (se for relativo, coloca junto ao executável ou src)
+    if not os.path.isabs(db_path):
+        if getattr(sys, 'frozen', False):
+            # No executável, o DB deve ficar na pasta do .exe, não na temporária _MEIPASS
+            db_path = os.path.join(os.path.dirname(sys.executable), db_path)
+        else:
+            db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), db_path)
 
-    app.register_blueprint(home_bp)
-    app.register_blueprint(admin_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(project_bp)
-    
-    # Inject services
     repo = SQLiteRepository(db_path)
     mapper = WindowsDriveMapper()
     
@@ -62,5 +52,8 @@ def create_app(db_path='database.db'):
     app.repo = repo
     app.mapper = mapper
     
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(project_bp)
+    app.register_blueprint(admin_bp)
+    
     return app
-

@@ -51,7 +51,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013-3v1" />
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                     </a>
                 </div>
@@ -78,7 +78,7 @@
     <div id="modal-usuario"
         class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
         <div
-            class="bg-white rounded-2xl shadow-2xl w-full max-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="p-6 border-b border-slate-100">
                 <h3 id="modal-title" class="text-lg font-bold text-slate-800">Novo Usuário</h3>
             </div>
@@ -167,13 +167,11 @@
         }
 
         function validarFormUsuario() {
-            const u = document.getElementById('input-username');
-            const r = document.getElementById('select-role');
-            const p = document.getElementById('input-password');
+            const u = document.getElementById('input-username').value.trim();
+            const r = document.getElementById('select-role').value;
+            const p = document.getElementById('input-password').value.trim();
             const btn = document.getElementById('btn-salvar-usuario');
-            if (u && r && p && btn) {
-                btn.disabled = !(u.value.trim() && r.value && p.value.trim());
-            }
+            btn.disabled = !(u && r && p);
         }
 
         async function salvarUsuario() {

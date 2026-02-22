@@ -4,7 +4,6 @@ from ..decorators import role_required
 project_bp = Blueprint('project', __name__)
 
 @project_bp.route('/dashboard')
-@role_required(['Gerente', 'Editor', 'Default'])
 def dashboard():
     project_service = current_app.project_service
     
@@ -14,7 +13,6 @@ def dashboard():
     return render_template('dashboard.html', 
                            online_projects=online_projects, 
                            gaveta_projects=gaveta_projects)
-
 
 @project_bp.route('/mapear', methods=['POST'])
 def mapear():
@@ -52,3 +50,5 @@ def desconectar_todas():
     if errors:
         return jsonify({'success': False, 'message': f'Erros: {"; ".join(errors)}'})
     return jsonify({'success': True, 'message': f'{len(drives)} unidade(s) desconectada(s).'})
+
+

@@ -3,27 +3,31 @@ import threading
 import sys
 import os
 
-# Adds src to path (Hexagonal Architecture)
+# Ajusta o path para encontrar o src (Hexagonal)
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 from infrastructure.web.app import create_app
 
 def start_flask():
     app = create_app()
-    # Runs Flask in a specific port, no reloader to avoid issues with pywebview
     app.run(port=5000, debug=False, use_reloader=False)
 
 if __name__ == "__main__":
-    # Start Flask in a background daemon thread
+    # Inicia o Flask em uma thread separada
     flask_thread = threading.Thread(target=start_flask, daemon=True)
     flask_thread.start()
 
-    # Create the native desktop window pointing to the local Flask server
+    # Cria a janela desktop nativa
     webview.create_window(
-        'Base Architecture - App', 
+        'MAPPER OJC - Gestão de Projetos', 
         'http://127.0.0.1:5000',
-        width=1000,
+        width=500,
         height=800,
-        resizable=True
+        min_size=(500, 800),
+        resizable=False,
+        fullscreen=False,
+        frameless=False,
+        x=0,
+        y=0
     )
     webview.start()

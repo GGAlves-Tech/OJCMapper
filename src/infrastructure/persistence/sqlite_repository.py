@@ -49,10 +49,10 @@ class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
                          ('user', 'user', 'Default'))
             
             settings = [
-                ('online_path', '\\\\localhost\\Online'),
-                ('gaveta_path', '\\\\localhost\\Gaveta'),
-                ('av_medias_a_path', '\\\\localhost\\Media'),
-                ('lista_path', '\\\\localhost\\Lists'),
+                ('online_path', 'Z:/Online'),
+                ('gaveta_path', 'Y:/Gaveta'),
+                ('av_medias_a_path', 'X:/Media'),
+                ('lista_path', 'W:/Lists'),
                 ('online_gaveta_status', 'OFFLINE'),
                 ('log_path', './app.log'),
                 ('sd_card_path', 'E:/'),
@@ -60,7 +60,6 @@ class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
                 ('network_user', 'guest'),
                 ('network_password', 'password123')
             ]
-
             conn.executemany('INSERT INTO settings (key, value) VALUES (?, ?)', settings)
             
             projects = [

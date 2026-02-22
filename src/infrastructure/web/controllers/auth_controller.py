@@ -2,8 +2,11 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/login', methods=['GET', 'POST'])
+@auth_bp.route('/')
+def index():
+    return redirect(url_for('project.dashboard'))
 
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     auth_service = current_app.auth_service
     if request.method == 'POST':

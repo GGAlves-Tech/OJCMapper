@@ -1,75 +1,97 @@
-# Base Architecture - Flask + PyWebView
+# OJCMapper - Gestão de Mapeamentos de Rede
 
-Este é um boilerplate de aplicação desktop utilizando **Flask** para o backend/UI logic e **PyWebView** para a interface nativa, estruturado seguindo os princípios da **Arquitetura Hexagonal (Clean Architecture)**.
+> [!IMPORTANT]
+> **Aplicação Nativa Windows Desktop**
+> Este software foi projetado exclusivamente para o sistema operacional Windows, utilizando comandos nativos de rede (`net use`) e interface `pywebview`.
 
-## 🚀 Tecnologias Utilizadas
+Utilitário desktop para gerenciamento de mapeamentos de rede e organização de projetos (Online/Gaveta), desenvolvido como parte do projeto TADS UNITINS/Anhanguera.
 
-- **Python 3.10+**: Linguagem base.
-- **Flask**: Micro-framework web para gerenciar rotas, lógica e templates.
-- **PyWebView**: Biblioteca para criar janelas desktop nativas que renderizam conteúdo web.
-- **SQLite**: Banco de dados relacional leve (boilerplate de repositório incluído).
-- **Jinja2**: Motor de templates para o frontend equilibrado.
+## 🚀 Sobre o Projeto
 
-## 🏗️ Padrões de Arquitetura
 
-O projeto segue a **Arquitetura Hexagonal**, dividida em:
+O **OJCMapper** é uma evolução do protótipo inicial, agora construído sobre uma base sólida de **Arquitetura Hexagonal (Ports and Adapters)**. O sistema permite que usuários conectem e gerenciem diretórios de rede de forma intuitiva, oferecendo uma interface desktop moderna baseada em tecnologias web.
 
-- **Domain (Domínio)**: Contém as regras de negócio puras e definições de interfaces (Ports). Não possui dependências externas.
-- **Application (Aplicação)**: Casos de uso que orquestram a lógica do domínio e chamam os adaptadores.
-- **Infrastructure (Infraestrutura)**: Implementações técnicas (Adapters).
-    - **Web**: Servidor Flask, controladores e recursos estáticos.
-    - **Persistence**: Acesso a dados (SQLite).
+### Principais Funcionalidades
+- **Conexão Dinâmica**: Mapeamento de unidades de rede Windows via interface visual.
+- **Gestão de Projetos**: Organização categorizada entre projetos ativos (Online) e arquivados (Gaveta).
+- **Relatórios**: Exportação de dados consolidados para auditoria.
+- **Segurança**: Controle de acesso baseado em perfis (Gerente, Editor, Default).
+- **Interface Desktop**: Janela nativa leve utilizando `pywebview`.
 
-## 📂 Estrutura de Pastas
+## 🛠️ Stack Tecnológica
+
+- **Linguagem**: Python 3.12+
+- **Backend / Web Adapter**: Flask
+- **Frontend**: HTML5, Tailwind CSS, JavaScript Vanilla
+- **Desktop Wrapper**: pywebview
+- **Persistência**: SQLite 3
+- **Arquitetura**: Hexagonal (Clean Architecture)
+
+## 🏗️ Arquitetura
+
+O projeto segue os princípios da **Arquitetura Hexagonal** para garantir o desacoplamento total entre as regras de negócio e os componentes externos:
 
 ```text
-/
-├── main.py              # Ponto de entrada (Bootstrap)
-├── requirements.txt     # Dependências do projeto
-└── src/
-    ├── application/     # Camada de Aplicação (Serviços/Cases)
-    ├── domain/          # Camada de Domínio (Entidades/Interfaces)
-    └── infrastructure/  # Camada de Infraestrutura (Drivers/Adapters)
-        ├── persistence/ # Implementação de Repositórios
-        └── web/         # Flask App, Controllers, Templates/Static
+src/
+├── domain/            # Regras de Negócio e Entidades (Puro Python)
+├── application/       # Casos de Uso (Orquestração do Sistema)
+└── infrastructure/    # Implementações Técnicas (Adaptadores)
+    ├── persistence/   # Mapeadores e Repositórios SQLite
+    ├── system/        # Integração com Windows OS
+    └── web/           # Flask App, Templates e Static Assets
 ```
 
-## 🛠️ Como Executar
+## 🏁 Início Rápido
+
+Siga os passos abaixo para rodar o projeto em ambiente de desenvolvimento:
 
 ### 1. Pré-requisitos
-Certifique-se de ter o Python instalado em sua máquina.
+- Python 3.12 ou superior instalado.
+- Sistema Operacional Windows (necessário para comandos de rede `net use`).
 
-### 2. Configuração do Ambiente
-Clone o repositório e navegue até a pasta do projeto:
-
+### 2. Instalação
+Clone o repositório e acesse a pasta do projeto:
 ```bash
-# Criar ambiente virtual
-python -m venv venv
-
-# Ativar ambiente virtual (Windows)
-.\venv\Scripts\activate
-
-# Ativar ambiente virtual (Linux/macOS)
-source venv/bin/activate
+git clone <url-do-repositorio>
+cd OJCMapper
 ```
 
-### 3. Instalação de Dependências
+Crie e ative um ambiente virtual (recomendado):
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Execução
+### 3. Execução
+Para iniciar a aplicação em modo desktop:
 ```bash
-python main.py
+python main_desktop.py
 ```
 
-## 📦 Empacotamento (Build)
-Para gerar um executável (.exe) utilizando o PyInstaller:
-
-```bash
-pyinstaller --noconfirm --onefile --windowed --add-data "src/infrastructure/web/templates;infrastructure/web/templates" --add-data "src/infrastructure/web/static;infrastructure/web/static" main.py
-```
-*(Nota: Ajuste os caminhos de `--add-data` conforme necessário para o seu sistema)*
+### 4. Credenciais de Teste (Padrão)
+| Usuário | Senha | Perfil |
+| :--- | :--- | :--- |
+| `admin` | `admin` | Gerente |
+| `editor` | `editor` | Editor |
+| `user` | `user` | Default |
 
 ---
-Desenvolvido como uma base sólida para aplicações desktop modernas e modulares.
+
+## 📦 Empacotamento
+
+Para gerar o executável (.exe) standalone:
+```bash
+# O comando exato será configurado no build_desktop.py em fases futuras
+pyinstaller --onefile --noconsole main_desktop.py
+```
+
+## 📝 Licença
+Este projeto é acadêmico e segue as diretrizes da instituição UNITINS/Anhanguera.
+
+---
+*Mantido por Guthemberg B. Alves - 2026*

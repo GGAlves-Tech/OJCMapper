@@ -21,10 +21,6 @@ class MapUseCase:
 
         # Monta caminho UNC: \\AVMediasA\NomeProjeto
         network_path = os.path.join(av_medias_base, project_name).replace('/', '\\')
-        if not network_path.startswith('\\\\'):
-             # Se o usuário configurar algo como "localhost/Media", garantimos o prefixo UNC
-             network_path = '\\\\' + network_path.lstrip('\\')
-
 
         letter = self.mapper.get_available_letter()
         if not letter:
