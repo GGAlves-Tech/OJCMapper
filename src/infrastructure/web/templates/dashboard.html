@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="border-b border-slate-200">
+        <nav class="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto" aria-label="Tabs">
+            <a href="{{ url_for('project.dashboard') }}"
+                class="{% if request.endpoint == 'project.dashboard' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14.828 14.828a4 4 0 015.656 0l4-4a4 4 0 00-5.656-5.656l-1.101 1.101" />
+                </svg>
+                Conectar
+            </a>
+
+
+            <a href="{{ url_for('admin.deletar') }}"
+                class="{% if request.endpoint == 'admin.deletar' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Deletar
+            </a>
+
+            <a href="{{ url_for('admin.usuarios') }}"
+                class="{% if request.endpoint == 'admin.usuarios' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                Usuários
+            </a>
+
+            <a href="{{ url_for('admin.configurar') }}"
+                class="{% if request.endpoint == 'admin.configurar' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Configurar
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Lista de Projetos com Abas -->
+    <section class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-full">
+            <!-- Cabeçalho das Abas -->
+            <div class="px-6 border-b border-slate-200 bg-slate-50/50">
+                <nav class="-mb-px flex space-x-8" aria-label="Project Tabs">
+                    <button onclick="switchProjectTab('online')" id="tab-online"
+                        class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                        <img src="https://img.icons8.com/color/48/folder-invoices.png" class="h-5 w-5" />
+                        Online
+                        <span class="bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-xs font-bold">{{
+                            online_projects|length }}</span>
+                    </button>
+                    <button onclick="switchProjectTab('gaveta')" id="tab-gaveta"
+                        class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                        <img src="https://img.icons8.com/color/48/archive.png" class="h-5 w-5" />
+                        Gaveta
+                        <span class="bg-slate-100 text-slate-500 py-0.5 px-2 rounded-full text-xs font-bold">{{
+                            gaveta_projects|length }}</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="flex-1">
+                <!-- Painel Online -->
+                <div id="panel-online" class="block">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50/50 text-slate-500 font-medium border-b border-slate-200">
+                                <tr>
+                                    <th class="px-6 py-3">Nome</th>
+                                    <th class="px-6 py-3">Caminho</th>
+                                    <th class="px-6 py-3 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                {% for project in online_projects %}
+                                <tr class="hover:bg-blue-50/30 transition-colors">
+                                    <td class="px-6 py-4 font-medium text-slate-800">{{ project.name }}</td>
+                                    <td class="px-6 py-4 text-xs font-mono text-slate-400">{{ project.path }}</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button data-path="{{ project.path }}" data-name="{{ project.name }}"
+                                            onclick="mapProject(this)"
+                                            class="text-blue-600 font-medium hover:underline">Mapear</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% if not online_projects %}
+                                <tr>
+                                    <td colspan="3" class="px-6 py-12 text-center text-slate-400 italic">Nenhum projeto
+                                        online encontrado.</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Painel Gaveta -->
+                <div id="panel-gaveta" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50/50 text-slate-500 font-medium border-b border-slate-200">
+                                <tr>
+                                    <th class="px-6 py-3">Nome</th>
+                                    <th class="px-6 py-3">Caminho</th>
+                                    <th class="px-6 py-3 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                {% for project in gaveta_projects %}
+                                <tr class="hover:bg-blue-50/30 transition-colors">
+                                    <td class="px-6 py-4 font-medium text-slate-800">{{ project.name }}</td>
+                                    <td class="px-6 py-4 text-xs font-mono text-slate-400">{{ project.path }}</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button data-path="{{ project.path }}" data-name="{{ project.name }}"
+                                            onclick="mapProject(this)"
+                                            class="text-blue-600 font-medium hover:underline">Mapear</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% if not gaveta_projects %}
+                                <tr>
+                                    <td colspan="3" class="px-6 py-12 text-center text-slate-400 italic">Nenhum projeto
+                                        em gaveta encontrado.</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mapa de letra de unidade → botão do projeto
+        const letterToButton = {};
+
+        async function disconnectAll() {
+            const btn = event.currentTarget;
+            if (btn.dataset.confirming !== 'true') {
+                btn.dataset.confirming = 'true';
+                btn.textContent = '⚠ Confirmar?';
+                btn.classList.add('text-red-600');
+                setTimeout(() => {
+                    btn.dataset.confirming = '';
+                    btn.textContent = '✕ Desconectar Todas';
+                    btn.classList.remove('text-red-600');
+                }, 3000);
+                return;
+            }
+            btn.dataset.confirming = '';
+            btn.disabled = true;
+            btn.textContent = 'Desconectando...';
+            try {
+                const resp = await fetch('/desconectar-todas', { method: 'POST' });
+                const data = await resp.json();
+                showToast(data.message, data.success ? 'success' : 'error');
+                loadDrives();
+            } catch (e) {
+                showToast('Erro ao desconectar todas.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✕ Desconectar Todas';
+            }
+        }
+
+        async function mapProject(btn) {
+            const path = btn.dataset.path;
+            const name = btn.dataset.name;
+            btn.disabled = true;
+            btn.textContent = 'Conectando...';
+            try {
+                const resp = await fetch('/mapear', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: path, name: name })
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    btn.textContent = `✓ ${data.letter}:`;
+                    btn.classList.remove('text-blue-600');
+                    btn.classList.add('text-green-600');
+                    letterToButton[data.letter] = btn; // registra o botão
+                    showToast(data.message, 'success');
+                    loadDrives();
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = 'Mapear';
+                    showToast(data.message, 'error');
+                }
+            } catch (e) {
+                btn.disabled = false;
+                btn.textContent = 'Mapear';
+                showToast('Erro de comunicação com o servidor.', 'error');
+            }
+        }
+
+        async function disconnectDrive(letter, btn) {
+            btn.disabled = true;
+            btn.textContent = 'Desconectando...';
+            try {
+                const resp = await fetch('/desconectar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ letter: letter })
+                });
+                const data = await resp.json();
+                showToast(data.message, data.success ? 'success' : 'error');
+                if (data.success) {
+                    // Reseta o botão do projeto correspondente
+                    const projectBtn = letterToButton[letter];
+                    if (projectBtn) {
+                        projectBtn.disabled = false;
+                        projectBtn.textContent = 'Mapear';
+                        projectBtn.classList.remove('text-green-600');
+                        projectBtn.classList.add('text-blue-600');
+                        delete letterToButton[letter];
+                    }
+                    loadDrives();
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = 'Desconectar';
+                }
+            } catch (e) {
+                btn.disabled = false;
+                btn.textContent = 'Desconectar';
+                showToast('Erro ao desconectar.', 'error');
+            }
+        }
+
+        async function loadDrives() {
+            const container = document.getElementById('unidades-list');
+            try {
+                const resp = await fetch('/unidades');
+                const drives = await resp.json();
+
+                // 1) Reseta todos os botões de projeto para estado inicial
+                document.querySelectorAll('[data-name]').forEach(btn => {
+                    if (btn.textContent === 'Conectando...') return; // não interrompe em progresso
+                    btn.disabled = false;
+                    btn.textContent = 'Mapear';
+                    btn.classList.remove('text-green-600');
+                    btn.classList.add('text-blue-600');
+                });
+                // Limpa o mapa de letras
+                Object.keys(letterToButton).forEach(k => delete letterToButton[k]);
+
+                // 2) Para cada unidade ativa, marca o botão do projeto correspondente
+                drives.forEach(d => {
+                    // extrai o nome do projeto do caminho UNC (último segmento)
+                    const projectName = d.path.replace(/\\/g, '/').split('/').filter(Boolean).pop();
+                    if (projectName) {
+                        const btn = document.querySelector(`[data-name="${projectName}"]`);
+                        if (btn) {
+                            btn.disabled = true;
+                            btn.textContent = `✓ ${d.letter}:`;
+                            btn.classList.remove('text-blue-600');
+                            btn.classList.add('text-green-600');
+                            letterToButton[d.letter] = btn;
+                        }
+                    }
+                });
+
+                // 3) Renderiza o painel de unidades ativas
+                if (drives.length === 0) {
+                    container.innerHTML = '<p class="text-slate-400 text-sm italic text-center py-4">Nenhuma unidade mapeada no momento.</p>';
+                    return;
+                }
+                container.innerHTML = drives.map(d => {
+                    const projectName = d.path.replace(/\\/g, '/').split('/').filter(Boolean).pop() || d.path;
+                    const btn = document.querySelector(`[data-name="${projectName}"]`);
+                    const displayPath = btn ? btn.dataset.path : projectName;
+                    return `
+                    <div class="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
+                        <div>
+                            <span class="font-bold text-slate-800">${d.letter}:</span>
+                            <p class="text-xs font-mono text-slate-400 mt-0.5">${displayPath}</p>
+                        </div>
+                        <button onclick="disconnectDrive('${d.letter}', this)"
+                            class="text-xs text-red-500 font-medium hover:underline">Desconectar</button>
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                container.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Erro ao carregar unidades.</p>';
+            }
+        }
+
+        // Load drives on page load
+        loadDrives();
+
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+            toast.className = `fixed bottom-6 right-6 ${bg} text-white text-sm font-medium px-4 py-3 rounded-xl shadow-lg z-50 transition-all`;
+
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        function switchProjectTab(tab) {
+            const onlineTab = document.getElementById('tab-online');
+            const gavetaTab = document.getElementById('tab-gaveta');
+            const onlinePanel = document.getElementById('panel-online');
+            const gavetaPanel = document.getElementById('panel-gaveta');
+
+            if (tab === 'online') {
+                // Ativa Aba Online
+                onlineTab.classList.add('border-blue-500', 'text-blue-600');
+                onlineTab.classList.remove('border-transparent', 'text-slate-500');
+                onlinePanel.classList.remove('hidden');
+                onlinePanel.classList.add('block');
+
+                // Desativa Aba Gaveta
+                gavetaTab.classList.remove('border-blue-500', 'text-blue-600');
+                gavetaTab.classList.add('border-transparent', 'text-slate-500');
+                gavetaPanel.classList.add('hidden');
+                gavetaPanel.classList.remove('block');
+            } else {
+                // Ativa Aba Gaveta
+                gavetaTab.classList.add('border-blue-500', 'text-blue-600');
+                gavetaTab.classList.remove('border-transparent', 'text-slate-500');
+                gavetaPanel.classList.remove('hidden');
+                gavetaPanel.classList.add('block');
+
+                // Desativa Aba Online
+                onlineTab.classList.remove('border-blue-500', 'text-blue-600');
+                onlineTab.classList.add('border-transparent', 'text-slate-500');
+                onlinePanel.classList.add('hidden');
+                onlinePanel.classList.remove('block');
+            }
+        }
+    </script>
+
+    <!-- Unidades Mapeadas -->
+    <section class="lg:col-span-1">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden glass">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+                <h3 class="font-semibold text-slate-800">Unidades Ativas</h3>
+                <div class="flex items-center gap-3">
+                    <button onclick="loadDrives()" class="text-xs text-slate-400 hover:text-slate-600">↻
+                        Atualizar</button>
+                    <button onclick="disconnectAll()" class="text-xs text-red-400 hover:text-red-600 font-medium">✕
+                        Desconectar Todas</button>
+                </div>
+            </div>
+            <div id="unidades-list" class="p-6">
+                <p class="text-slate-400 text-sm italic text-center py-4">Carregando...</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

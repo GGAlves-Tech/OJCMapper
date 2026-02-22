@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="border-b border-slate-200">
+        <nav class="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto" aria-label="Tabs">
+            <a href="{{ url_for('project.dashboard') }}"
+                class="{% if request.endpoint == 'project.dashboard' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14.828 14.828a4 4 0 015.656 0l4-4a4 4 0 00-5.656-5.656l-1.101 1.101" />
+                </svg>
+                Conectar
+            </a>
+
+
+            <a href="{{ url_for('admin.deletar') }}"
+                class="{% if request.endpoint == 'admin.deletar' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Deletar
+            </a>
+
+            <a href="{{ url_for('admin.usuarios') }}"
+                class="{% if request.endpoint == 'admin.usuarios' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                Usuários
+            </a>
+
+            <a href="{{ url_for('admin.configurar') }}"
+                class="{% if request.endpoint == 'admin.configurar' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Configurar
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden p-8">
+    <div class="max-w-2xl">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">Configurações do Sistema</h3>
+        <p class="text-slate-500 mb-6">Ajuste os parâmetros globais de mapeamento e diretórios.</p>
+
+        <form action="{{ url_for('admin.save_configurar') }}" method="POST" class="space-y-6">
+            {% set label_map = {
+            'online_path': 'Caminho Online',
+            'gaveta_path': 'Caminho Gaveta',
+            'av_medias_a_path': 'Caminho de Mídias',
+            'lista_path': 'Caminho de Listas',
+            'online_gaveta_status': 'STATUS (Online/Gaveta)',
+            'log_path': 'Caminho do Log',
+            'sd_card_path': 'Caminho SD Card',
+            'remote_repo': 'Repositório Remoto',
+            'network_user': 'Usuário de Rede',
+            'network_password': 'Senha de Rede'
+            } %}
+            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                {% for key, value in settings.items() %}
+                <div class="sm:col-span-2">
+                    <label class="block text-sm font-medium text-slate-700">{{ label_map.get(key, key|replace('_', '
+                        ')|upper) }}</label>
+                    <input type="text" name="{{ key }}"
+                        class="mt-1 block w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                        value="{{ value }}">
+                </div>
+                {% endfor %}
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Salvar Configurações
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

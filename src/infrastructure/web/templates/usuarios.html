@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="border-b border-slate-200">
+        <nav class="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto" aria-label="Tabs">
+            <a href="{{ url_for('project.dashboard') }}"
+                class="{% if request.endpoint == 'project.dashboard' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14.828 14.828a4 4 0 015.656 0l4-4a4 4 0 00-5.656-5.656l-1.101 1.101" />
+                </svg>
+                Conectar
+            </a>
+
+            <a href="{{ url_for('admin.deletar') }}"
+                class="{% if request.endpoint == 'admin.deletar' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Deletar
+            </a>
+
+            <a href="{{ url_for('admin.usuarios') }}"
+                class="{% if request.endpoint == 'admin.usuarios' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                Usuários
+            </a>
+
+            <a href="{{ url_for('admin.configurar') }}"
+                class="{% if request.endpoint == 'admin.configurar' %}border-blue-500 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Configurar
+            </a>
+        </nav>
+    </div>
+</div>
+
+{% if session.role != 'Editor' %}
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+        <h3 class="font-semibold text-slate-800">Gestão de Usuários</h3>
+        <button onclick="abrirModalUsuario('create')"
+            class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-all shadow-sm flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Novo Usuário
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                <tr>
+                    <th class="px-6 py-3">Usuário</th>
+                    <th class="px-6 py-3">Perfil</th>
+                    <th class="px-6 py-3 text-right">Ação</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for user in users %}
+                <tr class="hover:bg-blue-50/30 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-slate-800">{{ user.username }}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                            {% if user.role|lower == 'gerente' %}bg-purple-100 text-purple-800 border border-purple-200
+                            {% elif user.role|lower == 'editor' %}bg-emerald-100 text-emerald-800 border border-emerald-200
+                            {% else %}bg-slate-100 text-slate-800 border border-slate-200{% endif %}">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right flex justify-end gap-3">
+                        {% if user.username == session.username %}
+                        {% if session.role != 'Editor' %}
+                        <button disabled
+                            class="text-slate-400 font-medium cursor-not-allowed flex items-center gap-1 opacity-50"
+                            title="Você não pode editar sua própria conta aqui">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Editar
+                        </button>
+                        {% else %}
+                        <button
+                            onclick="abrirModalUsuario('edit', {username: '{{ user.username }}', role: '{{ user.role }}'})"
+                            class="text-blue-600 font-medium hover:text-blue-700 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Editar
+                        </button>
+                        {% endif %}
+                        <button disabled
+                            class="text-slate-400 font-medium cursor-not-allowed flex items-center gap-1 opacity-50"
+                            title="Você não pode excluir sua própria conta">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Deletar
+                        </button>
+                        {% else %}
+                        <button
+                            onclick="abrirModalUsuario('edit', {username: '{{ user.username }}', role: '{{ user.role }}'})"
+                            class="text-blue-600 font-medium hover:text-blue-700 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Editar
+                        </button>
+                        <button onclick="confirmarDeleteUsuario('{{ user.username }}')"
+                            class="text-red-600 font-medium hover:text-red-700 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Deletar
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="flex flex-col items-center justify-center py-12 text-slate-500">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-20" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+    </svg>
+    <p class="text-lg font-medium">Área de Autogerenciamento</p>
+    <p class="text-sm">Utilize a modal para atualizar seus dados.</p>
+</div>
+{% endif %}
+
+<!-- Modal Confirmação Delete -->
+<div id="modal-confirm-delete"
+    class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-sm overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div class="p-6 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Remover Usuário</h3>
+            <p class="text-sm text-slate-500">Tem certeza que deseja remover o usuário <span id="span-delete-user"
+                    class="font-bold text-slate-800"></span>? Esta ação é irreversível.</p>
+        </div>
+        <div class="p-4 bg-slate-50 flex gap-2 justify-center">
+            <button onclick="fecharModalDelete()"
+                class="px-4 py-2 rounded-lg font-semibold text-slate-600 hover:bg-slate-200 transition-all">
+                Cancelar
+            </button>
+            <button id="btn-confirm-delete"
+                class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700 transition-all">
+                Remover
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let userToDelete = null;
+
+    function confirmarDeleteUsuario(username) {
+        userToDelete = username;
+        document.getElementById('span-delete-user').textContent = username;
+        document.getElementById('btn-confirm-delete').onclick = () => execDeleteUsuario(username);
+        document.getElementById('modal-confirm-delete').classList.remove('hidden');
+    }
+
+    function fecharModalDelete() {
+        document.getElementById('modal-confirm-delete').classList.add('hidden');
+    }
+
+    async function execDeleteUsuario(username) {
+        try {
+            const resp = await fetch('/usuarios/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+            const data = await resp.json();
+
+            if (data.success) {
+                fecharModalDelete();
+                if (window.showToast) window.showToast(data.message, 'success');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                if (window.showToast) window.showToast(data.message, 'error');
+            }
+        } catch (e) {
+            alert('Erro ao remover usuário.');
+        }
+    }
+
+    // Ocultar modal de carregamento se houver um erro no showToast global
+    if (!window.showToast) {
+        window.showToast = (msg, type) => {
+            const bg = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 right-6 ${bg} text-white text-sm font-medium px-4 py-3 rounded-xl shadow-lg z-[200] transition-all`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        };
+    }
+</script>
+{% endblock %}
