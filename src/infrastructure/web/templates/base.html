@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='app_icon.png') }}">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -27,9 +28,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-xs">M</span>
-                    </div>
+                    <img src="{{ url_for('static', filename='app_icon.png') }}" alt="Logo"
+                        class="w-8 h-8 rounded-lg shadow-sm">
                     <h1 class="text-xl font-bold tracking-tight text-slate-900">
                         MAPPER <span class="text-blue-600">OJC</span>
                     </h1>

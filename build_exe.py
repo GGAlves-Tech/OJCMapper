@@ -32,6 +32,16 @@ params = [
     '--clean',                   # Limpar cache do PyInstaller antes de rodar
 ]
 
+# Adicionar ícone se existir (.ico necessário para Windows)
+icon_file = os.path.join(base_dir, 'app_icon.ico')
+if os.path.exists(icon_file):
+    params.extend(['--icon', icon_file])
+else:
+    # Tenta procurar na pasta static se o usuário converteu lá
+    static_icon = os.path.join(base_dir, 'src', 'infrastructure', 'web', 'static', 'app_icon.ico')
+    if os.path.exists(static_icon):
+        params.extend(['--icon', static_icon])
+
 # Adicionar os data files como argumentos do PyInstaller
 for src, dest in data_files:
     if os.path.exists(os.path.join(base_dir, src)):
