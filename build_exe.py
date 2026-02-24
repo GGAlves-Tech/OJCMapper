@@ -19,7 +19,7 @@ for folder in ['build', 'dist']:
 data_files = [
     (os.path.join('src', 'infrastructure', 'web', 'templates'), os.path.join('infrastructure', 'web', 'templates')),
     (os.path.join('src', 'infrastructure', 'web', 'static'), os.path.join('infrastructure', 'web', 'static')),
-    ('espelho.db', '.'),
+    ('database.db', '.'),
 ]
 
 # Construir os argumentos do PyInstaller

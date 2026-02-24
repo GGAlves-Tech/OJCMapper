@@ -86,9 +86,9 @@ python main_desktop.py
 
 Para gerar o executável (.exe) standalone:
 ```bash
-# O comando exato será configurado no build_desktop.py em fases futuras
-pyinstaller --onefile --noconsole main_desktop.py
+python build_exe.py
 ```
+> O executável será gerado em `dist/MAPPER_OJC.exe`
 
 ## 📝 Licença
 Este projeto é acadêmico e segue as diretrizes da instituição UNITINS/Anhanguera.

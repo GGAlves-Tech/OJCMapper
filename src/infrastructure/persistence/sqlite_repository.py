@@ -55,10 +55,6 @@ class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
                 ('lista_path', 'W:/Lists'),
                 ('online_gaveta_status', 'OFFLINE'),
                 ('log_path', './app.log'),
-                ('sd_card_path', 'E:/'),
-                ('remote_repo', '//server/repo'),
-                ('network_user', 'guest'),
-                ('network_password', 'password123')
             ]
             conn.executemany('INSERT INTO settings (key, value) VALUES (?, ?)', settings)
             
