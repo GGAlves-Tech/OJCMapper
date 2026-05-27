@@ -1,8 +1,9 @@
+import logging
 from flask import Blueprint, render_template, redirect, url_for, session, current_app, jsonify, request
 from ..decorators import role_required
 from domain import ProjectType
-import os
-from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -28,6 +29,7 @@ def save_usuario():
 
     current_user = session.get('username')
     current_role = session.get('role')
+    actor = current_user or ''
 
     if current_role == 'Editor':
         if mode == 'create' or username != current_user:
@@ -36,12 +38,13 @@ def save_usuario():
 
     try:
         if mode == 'create':
-            current_app.auth_service.create_user(username, password, role)
+            current_app.auth_service.create_user(username, password, role, actor=actor)
             return jsonify({'success': True, 'message': 'Usuário criado com sucesso.'})
         else:
-            current_app.auth_service.update_user(username, password, role)
+            current_app.auth_service.update_user(username, password, role, actor=actor)
             return jsonify({'success': True, 'message': 'Usuário atualizado com sucesso.'})
     except Exception as e:
+        logger.error('Erro ao salvar usuário %s: %s', username, e)
         return jsonify({'success': False, 'message': str(e)})
 
 
@@ -50,14 +53,16 @@ def save_usuario():
 def delete_usuario():
     data = request.get_json()
     username = data.get('username')
+    actor = session.get('username', '')
 
     if username == session.get('username'):
         return jsonify({'success': False, 'message': 'Você não pode excluir sua própria conta.'})
 
     try:
-        current_app.auth_service.delete_user(username)
+        current_app.auth_service.delete_user(username, actor=actor)
         return jsonify({'success': True, 'message': 'Usuário removido com sucesso.'})
     except Exception as e:
+        logger.error('Erro ao deletar usuário %s: %s', username, e)
         return jsonify({'success': False, 'message': str(e)})
 
 
@@ -81,7 +86,8 @@ def deletar_executar():
     data = request.get_json()
     names = data.get('projetos', [])
     scope = ProjectType(data.get('scope', 'ONLINE'))
-    result = current_app.delete_service.delete_projects(names, scope)
+    actor = session.get('username', '')
+    result = current_app.delete_service.delete_projects(names, scope, actor=actor)
     return jsonify(result)
 
 
@@ -90,14 +96,16 @@ def deletar_executar():
 def engavetar():
     data = request.get_json()
     names = data.get('projetos', [])
-    result = current_app.delete_service.engavetar_projects(names)
+    actor = session.get('username', '')
+    result = current_app.delete_service.engavetar_projects(names, actor=actor)
     return jsonify(result)
 
 
 @admin_bp.route('/exportar-lista', methods=['POST'])
 @role_required(['Gerente', 'Editor'])
 def exportar_lista():
-    result = current_app.export_service.export_media_list()
+    actor = session.get('username', '')
+    result = current_app.export_service.export_media_list(actor=actor)
     return jsonify(result)
 
 
@@ -111,5 +119,6 @@ def configurar():
 @admin_bp.route('/configurar/save', methods=['POST'])
 @role_required(['Gerente'])
 def save_configurar():
-    current_app.settings_service.update_all(request.form.to_dict())
+    actor = session.get('username', '')
+    current_app.settings_service.update_all(request.form.to_dict(), actor=actor)
     return redirect(url_for('admin.configurar'))

@@ -1,14 +1,19 @@
+import logging
 import os
-from domain import SettingsRepository, FileSystemPort, ProjectType
-from domain.shared.events import EventBus, ProjetoDeletado, ProjetoEngavetado
+from typing import Optional
+from domain import SettingsRepository, FileSystemPort, ProjectType, EventBus, ProjetoDeletado, ProjetoEngavetado
+from domain.audit.audit_port import AuditPort
+
+logger = logging.getLogger(__name__)
 
 
 class DeleteUseCase:
-    def __init__(self, settings_repo: SettingsRepository, fs: FileSystemPort):
+    def __init__(self, settings_repo: SettingsRepository, fs: FileSystemPort, audit: Optional[AuditPort] = None):
         self.settings_repo = settings_repo
         self.fs = fs
+        self.audit = audit
 
-    def delete_projects(self, project_names: list[str], scope: ProjectType) -> dict:
+    def delete_projects(self, project_names: list[str], scope: ProjectType, actor: str = '') -> dict:
         settings = self.settings_repo.get_all_settings()
         path_key = 'online_path' if scope == ProjectType.ONLINE else 'gaveta_path'
         metadata_base = settings.get(path_key, '').strip()
@@ -31,7 +36,10 @@ class DeleteUseCase:
 
                 done.append(name)
                 EventBus.publish(ProjetoDeletado(project_name=name, scope=scope.value))
+                if self.audit:
+                    self.audit.log(actor, f'projeto-deletado:{name}:{scope.value}')
             except Exception as e:
+                logger.error('Erro ao deletar projeto %s: %s', name, e)
                 failed.append({'name': name, 'error': str(e)})
 
         return {
@@ -41,7 +49,7 @@ class DeleteUseCase:
             'failed': failed,
         }
 
-    def engavetar_projects(self, project_names: list[str]) -> dict:
+    def engavetar_projects(self, project_names: list[str], actor: str = '') -> dict:
         settings = self.settings_repo.get_all_settings()
         online_base = settings.get('online_path', '').strip()
         gaveta_base = settings.get('gaveta_path', '').strip()
@@ -62,9 +70,12 @@ class DeleteUseCase:
                     self.fs.move_directory(src, dst)
                     done.append(name)
                     EventBus.publish(ProjetoEngavetado(project_name=name))
+                    if self.audit:
+                        self.audit.log(actor, f'projeto-engavetado:{name}')
                 else:
                     failed.append({'name': name, 'error': 'Pasta não encontrada na origem.'})
             except Exception as e:
+                logger.error('Erro ao engavetar projeto %s: %s', name, e)
                 failed.append({'name': name, 'error': str(e)})
 
         return {

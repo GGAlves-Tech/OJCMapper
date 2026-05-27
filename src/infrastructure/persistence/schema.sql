@@ -40,7 +40,7 @@ INSERT OR IGNORE INTO settings (key, value) VALUES ('gaveta_path', 'Y:/Gaveta');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('av_medias_a_path', 'X:/Media');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('lista_path', 'W:/Lists');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('online_gaveta_status', 'OFFLINE');
-INSERT OR IGNORE INTO settings (key, value) VALUES ('log_path', './app.log');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('log_path', './logs');
 
 INSERT INTO projects (name, type, path) VALUES ('Projeto A', 'ONLINE', 'Z:/Online/ProjetoA');
 INSERT INTO projects (name, type, path) VALUES ('Projeto B', 'GAVETA', 'Y:/Gaveta/ProjetoB');

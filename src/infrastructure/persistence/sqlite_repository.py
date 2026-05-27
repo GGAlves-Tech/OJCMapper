@@ -1,5 +1,7 @@
 from domain import User, Project, Setting, UserRepository, SettingsRepository, ProjectRepository
-from .mappers import UserMapper, ProjectMapper, SettingMapper
+from .user_mapper import UserMapper
+from .project_mapper import ProjectMapper
+from .setting_mapper import SettingMapper
 from typing import List, Optional
 import sqlite3
 
@@ -54,7 +56,7 @@ class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
                 ('av_medias_a_path', 'X:/Media'),
                 ('lista_path', 'W:/Lists'),
                 ('online_gaveta_status', 'OFFLINE'),
-                ('log_path', './app.log'),
+                ('log_path', './logs'),
             ]
             conn.executemany('INSERT INTO settings (key, value) VALUES (?, ?)', settings)
             

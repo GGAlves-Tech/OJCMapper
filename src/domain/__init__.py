@@ -1,14 +1,19 @@
 from .identity.user import User
 from .projects.project import Project
 from .shared.setting import Setting
-from .shared.value_objects import Role, ProjectType
+from .shared.role import Role
+from .shared.project_type import ProjectType
 from .identity.interfaces import UserRepository
 from .shared.interfaces import SettingsRepository
-from .projects.interfaces import ProjectRepository, FileSystemPort
+from .projects.project_repository import ProjectRepository
+from .shared.filesystem_port import FileSystemPort
 from .drives.interfaces import DriveMapper
-from .shared.events import (
-    DomainEvent, EventBus,
-    UsuarioCriado, UsuarioRemovido,
-    ProjetoEngavetado, ProjetoDeletado,
-    UnidadeMapeada, UnidadeDesconectada,
-)
+from .shared.domain_event import DomainEvent
+from .shared.event_bus import EventBus
+from .identity.usuario_criado import UsuarioCriado
+from .identity.usuario_removido import UsuarioRemovido
+from .projects.projeto_engavetado import ProjetoEngavetado
+from .projects.projeto_deletado import ProjetoDeletado
+from .drives.unidade_mapeada import UnidadeMapeada
+from .drives.unidade_desconectada import UnidadeDesconectada
+from .audit.audit_port import AuditPort

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from ..shared.value_objects import ProjectType
+from ..shared.project_type import ProjectType
 
 
 @dataclass

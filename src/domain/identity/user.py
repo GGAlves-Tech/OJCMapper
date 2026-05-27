@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from ..shared.value_objects import Role
+from ..shared.role import Role
 
 
 @dataclass

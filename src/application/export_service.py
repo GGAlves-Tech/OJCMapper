@@ -1,14 +1,20 @@
+import logging
 import os
 from datetime import datetime
+from typing import Optional
 from domain import SettingsRepository, FileSystemPort
+from domain.audit.audit_port import AuditPort
+
+logger = logging.getLogger(__name__)
 
 
 class ExportUseCase:
-    def __init__(self, settings_repo: SettingsRepository, fs: FileSystemPort):
+    def __init__(self, settings_repo: SettingsRepository, fs: FileSystemPort, audit: Optional[AuditPort] = None):
         self.settings_repo = settings_repo
         self.fs = fs
+        self.audit = audit
 
-    def export_media_list(self) -> dict:
+    def export_media_list(self, actor: str = '') -> dict:
         settings = self.settings_repo.get_all_settings()
         av_path = settings.get('av_medias_a_path', '').strip()
         lista_path = settings.get('lista_path', '').strip()
@@ -34,6 +40,10 @@ class ExportUseCase:
         try:
             self.fs.write_text_file(output_path, content)
         except Exception as e:
+            logger.error('Erro ao gravar lista de exportação: %s', e)
             return {'success': False, 'message': f'Erro ao gravar arquivo: {e}'}
+
+        if self.audit:
+            self.audit.log(actor, f'lista-exportada:{filename}')
 
         return {'success': True, 'message': f'{len(items)} projeto(s) exportado(s) → {filename}'}
