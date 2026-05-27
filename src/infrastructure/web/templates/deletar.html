@@ -198,14 +198,12 @@
     async function setScope(scope) {
         currentScope = scope;
 
-        // Update Tabs UI
         const activeClass = 'bg-white text-blue-600 shadow-sm';
         const inactiveClass = 'text-slate-500 hover:text-slate-700';
 
         document.getElementById('tab-online').className = `px-6 py-2 rounded-lg text-sm font-semibold transition-all ${scope === 'ONLINE' ? activeClass : inactiveClass}`;
         document.getElementById('tab-gaveta').className = `px-6 py-2 rounded-lg text-sm font-semibold transition-all ${scope === 'GAVETA' ? activeClass : inactiveClass}`;
 
-        // Show/Hide Engavetar button
         document.getElementById('btn-engavetar').classList.toggle('hidden', scope !== 'ONLINE');
 
         loadProjetos();
@@ -308,7 +306,6 @@
         }
     }
 
-    // Modal Deletar
     function abrirModalDeletar() {
         const container = document.getElementById('modal-list-names');
         container.innerHTML = '';
@@ -352,7 +349,6 @@
         }
     }
 
-    // Engavetar
     async function execEngavetar() {
         const btn = document.getElementById('btn-engavetar');
         const original = btn.innerHTML;

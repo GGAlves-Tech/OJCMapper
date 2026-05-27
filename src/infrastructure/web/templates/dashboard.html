@@ -150,7 +150,6 @@
     </section>
 
     <script>
-        // Mapa de letra de unidade → botão do projeto
         const letterToButton = {};
 
         async function disconnectAll() {
@@ -198,7 +197,7 @@
                     btn.textContent = `✓ ${data.letter}:`;
                     btn.classList.remove('text-blue-600');
                     btn.classList.add('text-green-600');
-                    letterToButton[data.letter] = btn; // registra o botão
+                    letterToButton[data.letter] = btn;
                     showToast(data.message, 'success');
                     loadDrives();
                 } else {
@@ -225,7 +224,6 @@
                 const data = await resp.json();
                 showToast(data.message, data.success ? 'success' : 'error');
                 if (data.success) {
-                    // Reseta o botão do projeto correspondente
                     const projectBtn = letterToButton[letter];
                     if (projectBtn) {
                         projectBtn.disabled = false;
@@ -252,7 +250,6 @@
                 const resp = await fetch('/unidades');
                 const drives = await resp.json();
 
-                // 1) Reseta todos os botões de projeto para estado inicial
                 document.querySelectorAll('[data-name]').forEach(btn => {
                     if (btn.textContent === 'Conectando...') return; // não interrompe em progresso
                     btn.disabled = false;
@@ -260,12 +257,9 @@
                     btn.classList.remove('text-green-600');
                     btn.classList.add('text-blue-600');
                 });
-                // Limpa o mapa de letras
                 Object.keys(letterToButton).forEach(k => delete letterToButton[k]);
 
-                // 2) Para cada unidade ativa, marca o botão do projeto correspondente
                 drives.forEach(d => {
-                    // extrai o nome do projeto do caminho UNC (último segmento)
                     const projectName = d.path.replace(/\\/g, '/').split('/').filter(Boolean).pop();
                     if (projectName) {
                         const btn = document.querySelector(`[data-name="${projectName}"]`);
@@ -279,7 +273,6 @@
                     }
                 });
 
-                // 3) Renderiza o painel de unidades ativas
                 if (drives.length === 0) {
                     container.innerHTML = '<p class="text-slate-400 text-sm italic text-center py-4">Nenhuma unidade mapeada no momento.</p>';
                     return;
@@ -303,7 +296,6 @@
             }
         }
 
-        // Load drives on page load
         loadDrives();
 
 

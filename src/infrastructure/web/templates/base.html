@@ -158,7 +158,6 @@
 
         function fecharModalUsuario() {
             document.getElementById('modal-usuario').classList.add('hidden');
-            // Remove o parâmetro da URL se houver redirecionamento
             const url = new URL(window.location);
             if (url.searchParams.has('change_password')) {
                 url.searchParams.delete('change_password');
