@@ -2,7 +2,7 @@ import subprocess
 import platform
 import re
 import os
-from .interfaces import DriveMapper
+from domain.interfaces import DriveMapper
 
 # Letters available for drive mapping (avoid system drives A-E)
 _CANDIDATE_LETTERS = 'FGHIJKLMNOPQRSTUVWXYZ'

@@ -1,16 +1,16 @@
 import os
-import shutil
 from domain import SettingsRepository
+from domain.interfaces import FileSystemPort
 from domain.value_objects import ProjectType
 
 
 class DeleteUseCase:
-    def __init__(self, settings_repo: SettingsRepository):
+    def __init__(self, settings_repo: SettingsRepository, fs: FileSystemPort):
         self.settings_repo = settings_repo
+        self.fs = fs
 
     def delete_projects(self, project_names: list[str], scope: ProjectType) -> dict:
         settings = self.settings_repo.get_all_settings()
-
         path_key = 'online_path' if scope == ProjectType.ONLINE else 'gaveta_path'
         metadata_base = settings.get(path_key, '').strip()
         av_medias_base = settings.get('av_medias_a_path', '').strip()
@@ -20,18 +20,16 @@ class DeleteUseCase:
 
         for name in project_names:
             try:
-                # 1. Deleta Metadados
                 if metadata_base:
                     meta_path = os.path.join(metadata_base, name)
-                    if os.path.exists(meta_path):
-                        shutil.rmtree(meta_path)
-                
-                # 2. Deleta Mídias
+                    if self.fs.directory_exists(meta_path):
+                        self.fs.delete_directory(meta_path)
+
                 if av_medias_base:
                     media_path = os.path.join(av_medias_base, name)
-                    if os.path.exists(media_path):
-                        shutil.rmtree(media_path)
-                
+                    if self.fs.directory_exists(media_path):
+                        self.fs.delete_directory(media_path)
+
                 done.append(name)
             except Exception as e:
                 failed.append({'name': name, 'error': str(e)})
@@ -40,21 +38,17 @@ class DeleteUseCase:
             'success': len(failed) == 0,
             'message': f'{len(done)} projeto(s) removidos.' if not failed else f'Removidos {len(done)}, falha em {len(failed)}.',
             'done': done,
-            'failed': failed
+            'failed': failed,
         }
 
     def engavetar_projects(self, project_names: list[str]) -> dict:
-        """
-        Move a PASTA INTEIRA do projeto de online_path para gaveta_path.
-        A pasta deixa de existir no ONLINE e passa a existir na GAVETA.
-        """
         settings = self.settings_repo.get_all_settings()
         online_base = settings.get('online_path', '').strip()
         gaveta_base = settings.get('gaveta_path', '').strip()
 
-        if not online_base or not os.path.isdir(online_base):
+        if not online_base or not self.fs.directory_exists(online_base):
             return {'success': False, 'message': 'Caminho ONLINE inválido.'}
-        if not gaveta_base or not os.path.isdir(gaveta_base):
+        if not gaveta_base or not self.fs.directory_exists(gaveta_base):
             return {'success': False, 'message': 'Caminho GAVETA inválido.'}
 
         done = []
@@ -64,14 +58,8 @@ class DeleteUseCase:
             src = os.path.join(online_base, name)
             dst = os.path.join(gaveta_base, name)
             try:
-                if os.path.exists(src):
-                    # Se já existir na gaveta, shutil.move pode falhar ou sobrescrever 
-                    # dependendo da lógica do SO. Vamos remover o destino se existir 
-                    # para garantir o move limpo.
-                    if os.path.exists(dst):
-                        shutil.rmtree(dst)
-                    
-                    shutil.move(src, dst)
+                if self.fs.directory_exists(src):
+                    self.fs.move_directory(src, dst)
                     done.append(name)
                 else:
                     failed.append({'name': name, 'error': 'Pasta não encontrada na origem.'})
@@ -82,5 +70,5 @@ class DeleteUseCase:
             'success': len(failed) == 0,
             'message': f'{len(done)} projeto(s) engavetados.' if not failed else f'Engavetados {len(done)}, falha em {len(failed)}.',
             'done': done,
-            'failed': failed
+            'failed': failed,
         }

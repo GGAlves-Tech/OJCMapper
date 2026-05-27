@@ -28,5 +28,8 @@ class AuthUseCase:
         user = User(id=None, username=username, password=hashed_password, role=Role(role))
         self.user_repo.update_user(user)
 
+    def get_all_users(self):
+        return self.user_repo.get_all_users()
+
     def delete_user(self, username: str) -> None:
         self.user_repo.delete_user(username)

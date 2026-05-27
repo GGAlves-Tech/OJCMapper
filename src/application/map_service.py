@@ -1,6 +1,6 @@
-from domain import SettingsRepository
-from infrastructure.system.interfaces import DriveMapper
 import os
+from domain import SettingsRepository
+from domain.interfaces import DriveMapper
 
 
 class MapUseCase:
