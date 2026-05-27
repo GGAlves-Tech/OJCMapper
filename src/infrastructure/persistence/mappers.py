@@ -1,5 +1,5 @@
 from domain import User, Project, Setting
-from domain.value_objects import Role, ProjectType
+from domain import Role, ProjectType
 import sqlite3
 
 

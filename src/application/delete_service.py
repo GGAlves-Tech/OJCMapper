@@ -1,7 +1,5 @@
 import os
-from domain import SettingsRepository
-from domain.interfaces import FileSystemPort
-from domain.shared.value_objects import ProjectType
+from domain import SettingsRepository, FileSystemPort, ProjectType
 from domain.shared.events import EventBus, ProjetoDeletado, ProjetoEngavetado
 
 

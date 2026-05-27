@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
-from domain import SettingsRepository
-from domain.interfaces import FileSystemPort
+from domain import SettingsRepository, FileSystemPort
 
 
 class ExportUseCase:

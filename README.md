@@ -4,7 +4,7 @@
 > **Aplicação Nativa Windows Desktop**
 > Este software foi projetado exclusivamente para o sistema operacional Windows, utilizando comandos nativos de rede (`net use`) e interface `pywebview`.
 
-Utilitário desktop para gerenciamento de mapeamentos de rede e organização de projetos (Online/Gaveta), desenvolvido como parte da Disciplana de Projeto Integrador TADS UNITINS/Anhanguera.
+Utilitário desktop para gerenciamento de mapeamentos de rede e organização de projetos (Online/Gaveta), desenvolvido como parte da Disciplina de Projeto Integrador TADS UNITINS/TV Anhanguera - Palmas-TO.
 
 ## 🚀 Sobre o Projeto
 
@@ -91,7 +91,7 @@ python build_exe.py
 > O executável será gerado em `dist/MAPPER_OJC.exe`
 
 ## 📝 Licença
-Este projeto é acadêmico e segue as diretrizes da instituição UNITINS/Anhanguera.
+Este projeto é acadêmico e segue as diretrizes da instituição UNITINS/TV Anhanguera - Palmas-TO.
 
 ---
 *Mantido por Guthemberg B. Alves - 2026*

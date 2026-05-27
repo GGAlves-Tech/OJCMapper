@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, current_app, request, jsonify
 from ..decorators import role_required
-from domain.value_objects import ProjectType
+from domain import ProjectType
 
 project_bp = Blueprint('project', __name__)
 

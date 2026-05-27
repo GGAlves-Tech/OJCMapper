@@ -1,6 +1,5 @@
 import os
-from domain import SettingsRepository
-from domain.interfaces import DriveMapper
+from domain import SettingsRepository, DriveMapper
 from domain.shared.events import EventBus, UnidadeMapeada, UnidadeDesconectada
 
 

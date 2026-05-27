@@ -1,6 +1,6 @@
 import os
 import shutil
-from domain.interfaces import FileSystemPort
+from domain import FileSystemPort
 
 
 class LocalFileSystemAdapter(FileSystemPort):

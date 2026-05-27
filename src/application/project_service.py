@@ -1,7 +1,5 @@
 import os
-from domain import ProjectRepository, SettingsRepository, Project
-from domain.interfaces import FileSystemPort
-from domain.value_objects import ProjectType
+from domain import ProjectRepository, SettingsRepository, Project, FileSystemPort, ProjectType
 
 
 class ProjectUseCase:
