@@ -31,9 +31,8 @@ CREATE TABLE IF NOT EXISTS projects (
 -- em name — não volte a executar os INSERT de projects na mesma base ou haverá duplicados.
 -- ---------------------------------------------------------------------------
 
-INSERT OR IGNORE INTO users (username, password, role) VALUES ('admin', 'admin', 'Gerente');
-INSERT OR IGNORE INTO users (username, password, role) VALUES ('editor', 'editor', 'Editor');
-INSERT OR IGNORE INTO users (username, password, role) VALUES ('user', 'user', 'Default');
+-- Senhas geradas via bcrypt (gensalt) — não inserir manualmente.
+-- O seed real é feito por SQLiteRepository._init_db ao primeiro boot.
 
 INSERT OR IGNORE INTO settings (key, value) VALUES ('online_path', 'Z:/Online');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('gaveta_path', 'Y:/Gaveta');

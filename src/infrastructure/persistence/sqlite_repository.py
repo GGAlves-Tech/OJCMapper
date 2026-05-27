@@ -1,9 +1,10 @@
+import sqlite3
+import bcrypt
+from typing import List, Optional
 from domain import User, Project, Setting, UserRepository, SettingsRepository, ProjectRepository
 from .user_mapper import UserMapper
 from .project_mapper import ProjectMapper
 from .setting_mapper import SettingMapper
-from typing import List, Optional
-import sqlite3
 
 class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
     def __init__(self, db_path: str):
@@ -43,12 +44,13 @@ class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
         
         user_count = conn.execute('SELECT COUNT(*) FROM users').fetchone()[0]
         if user_count == 0:
-            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', 
-                         ('admin', 'admin', 'Gerente'))
-            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', 
-                         ('editor', 'editor', 'Editor'))
-            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', 
-                         ('user', 'user', 'Default'))
+            def _hash(p): return bcrypt.hashpw(p.encode(), bcrypt.gensalt()).decode()
+            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+                         ('admin', _hash('admin'), 'Gerente'))
+            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+                         ('editor', _hash('editor'), 'Editor'))
+            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+                         ('user', _hash('user'), 'Default'))
             
             settings = [
                 ('online_path', 'Z:/Online'),

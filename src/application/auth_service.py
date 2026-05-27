@@ -1,6 +1,6 @@
-import hashlib
 import logging
 from typing import Optional
+import bcrypt
 from domain import User, UserRepository, Role, EventBus, UsuarioCriado, UsuarioRemovido
 from domain.audit.audit_port import AuditPort
 
@@ -13,11 +13,14 @@ class AuthUseCase:
         self.audit = audit
 
     def _hash_password(self, password: str) -> str:
-        return hashlib.sha256(password.encode()).hexdigest()
+        return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+    def _verify_password(self, password: str, hashed: str) -> bool:
+        return bcrypt.checkpw(password.encode(), hashed.encode())
 
     def login(self, username: str, password: str) -> Optional[User]:
         user = self.user_repo.get_by_username(username)
-        if user and user.password == self._hash_password(password):
+        if user and self._verify_password(password, user.password):
             return user
         return None
 

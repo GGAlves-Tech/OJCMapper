@@ -2,3 +2,4 @@ flask
 pywebview
 pyinstaller
 typing-extensions
+bcrypt
