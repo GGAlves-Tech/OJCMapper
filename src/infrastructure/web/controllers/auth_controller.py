@@ -16,7 +16,7 @@ def login():
         if user:
             session['user_id'] = user.id
             session['username'] = user.username
-            session['role'] = user.role
+            session['role'] = user.role.value
             return redirect(url_for('project.dashboard'))
         return render_template('login.html', error='Credenciais inválidas')
     return render_template('login.html')

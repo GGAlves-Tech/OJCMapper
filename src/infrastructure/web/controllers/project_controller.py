@@ -1,14 +1,15 @@
 from flask import Blueprint, render_template, redirect, url_for, session, current_app, request, jsonify
 from ..decorators import role_required
+from domain.value_objects import ProjectType
 
 project_bp = Blueprint('project', __name__)
 
 @project_bp.route('/dashboard')
 def dashboard():
     project_service = current_app.project_service
-    
-    online_projects = project_service.list_projects_by_type('ONLINE')
-    gaveta_projects = project_service.list_projects_by_type('GAVETA')
+
+    online_projects = project_service.list_projects_by_type(ProjectType.ONLINE)
+    gaveta_projects = project_service.list_projects_by_type(ProjectType.GAVETA)
     
     return render_template('dashboard.html', 
                            online_projects=online_projects, 

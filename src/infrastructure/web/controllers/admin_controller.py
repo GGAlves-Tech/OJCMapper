@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, current_app, jsonify, request
 from ..decorators import role_required
+from domain.value_objects import ProjectType
 import os
 from datetime import datetime
 
@@ -68,7 +69,8 @@ def deletar():
 @admin_bp.route('/deletar/projetos')
 @role_required(['Gerente', 'Editor'])
 def deletar_projetos():
-    scope = request.args.get('scope', 'ONLINE')
+    scope_str = request.args.get('scope', 'ONLINE')
+    scope = ProjectType(scope_str)
     projects = current_app.project_service.list_projects_by_type(scope)
     return jsonify({'projects': [{'name': p.name, 'path': p.path} for p in projects]})
 
@@ -77,7 +79,7 @@ def deletar_projetos():
 def deletar_executar():
     data = request.get_json()
     names = data.get('projetos', [])
-    scope = data.get('scope', 'ONLINE')
+    scope = ProjectType(data.get('scope', 'ONLINE'))
     result = current_app.delete_service.delete_projects(names, scope)
     return jsonify(result)
 

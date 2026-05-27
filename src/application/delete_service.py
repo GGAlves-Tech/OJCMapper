@@ -1,19 +1,17 @@
 import os
 import shutil
 from domain import SettingsRepository
+from domain.value_objects import ProjectType
+
 
 class DeleteUseCase:
     def __init__(self, settings_repo: SettingsRepository):
         self.settings_repo = settings_repo
 
-    def delete_projects(self, project_names: list[str], scope: str) -> dict:
-        """
-        Remove permanentemente a pasta do projeto em online_path ou gaveta_path
-        (metadados) E a pasta correspondente em av_medias_a_path (mídias físicas).
-        """
+    def delete_projects(self, project_names: list[str], scope: ProjectType) -> dict:
         settings = self.settings_repo.get_all_settings()
-        
-        path_key = 'online_path' if scope == 'ONLINE' else 'gaveta_path'
+
+        path_key = 'online_path' if scope == ProjectType.ONLINE else 'gaveta_path'
         metadata_base = settings.get(path_key, '').strip()
         av_medias_base = settings.get('av_medias_a_path', '').strip()
 

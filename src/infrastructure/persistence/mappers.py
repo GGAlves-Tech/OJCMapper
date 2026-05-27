@@ -1,5 +1,7 @@
 from domain import User, Project, Setting
+from domain.value_objects import Role, ProjectType
 import sqlite3
+
 
 class UserMapper:
     @staticmethod
@@ -8,8 +10,9 @@ class UserMapper:
             id=row['id'],
             username=row['username'],
             password=row['password'],
-            role=row['role']
+            role=Role(row['role'])
         )
+
 
 class ProjectMapper:
     @staticmethod
@@ -17,7 +20,7 @@ class ProjectMapper:
         return Project(
             id=row['id'],
             name=row['name'],
-            type=row['type'],
+            type=ProjectType(row['type']),
             path=row['path']
         )
 

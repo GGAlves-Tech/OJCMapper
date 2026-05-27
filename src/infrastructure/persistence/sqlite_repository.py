@@ -81,15 +81,15 @@ class SQLiteRepository(UserRepository, SettingsRepository, ProjectRepository):
 
     def add_user(self, user: User) -> None:
         conn = self._get_connection()
-        conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', 
-                     (user.username, user.password, user.role))
+        conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+                     (user.username, user.password, user.role.value))
         conn.commit()
         conn.close()
 
     def update_user(self, user: User) -> None:
         conn = self._get_connection()
-        conn.execute('UPDATE users SET password = ?, role = ? WHERE username = ?', 
-                     (user.password, user.role, user.username))
+        conn.execute('UPDATE users SET password = ?, role = ? WHERE username = ?',
+                     (user.password, user.role.value, user.username))
         conn.commit()
         conn.close()
 
