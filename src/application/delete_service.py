@@ -1,7 +1,8 @@
 import os
 from domain import SettingsRepository
 from domain.interfaces import FileSystemPort
-from domain.value_objects import ProjectType
+from domain.shared.value_objects import ProjectType
+from domain.shared.events import EventBus, ProjetoDeletado, ProjetoEngavetado
 
 
 class DeleteUseCase:
@@ -31,6 +32,7 @@ class DeleteUseCase:
                         self.fs.delete_directory(media_path)
 
                 done.append(name)
+                EventBus.publish(ProjetoDeletado(project_name=name, scope=scope.value))
             except Exception as e:
                 failed.append({'name': name, 'error': str(e)})
 
@@ -61,6 +63,7 @@ class DeleteUseCase:
                 if self.fs.directory_exists(src):
                     self.fs.move_directory(src, dst)
                     done.append(name)
+                    EventBus.publish(ProjetoEngavetado(project_name=name))
                 else:
                     failed.append({'name': name, 'error': 'Pasta não encontrada na origem.'})
             except Exception as e:

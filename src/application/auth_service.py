@@ -1,7 +1,8 @@
 import hashlib
-from domain import User, UserRepository
-from domain.value_objects import Role
 from typing import Optional
+from domain import User, UserRepository
+from domain.shared.value_objects import Role
+from domain.shared.events import EventBus, UsuarioCriado, UsuarioRemovido
 
 
 class AuthUseCase:
@@ -11,25 +12,24 @@ class AuthUseCase:
     def _hash_password(self, password: str) -> str:
         return hashlib.sha256(password.encode()).hexdigest()
 
-    def login(self, username, password) -> Optional[User]:
+    def login(self, username: str, password: str) -> Optional[User]:
         user = self.user_repo.get_by_username(username)
-        hashed_password = self._hash_password(password)
-        if user and user.password == hashed_password:
+        if user and user.password == self._hash_password(password):
             return user
         return None
-
-    def create_user(self, username, password, role: str) -> None:
-        hashed_password = self._hash_password(password)
-        user = User(id=None, username=username, password=hashed_password, role=Role(role))
-        self.user_repo.add_user(user)
-
-    def update_user(self, username, password, role: str) -> None:
-        hashed_password = self._hash_password(password)
-        user = User(id=None, username=username, password=hashed_password, role=Role(role))
-        self.user_repo.update_user(user)
 
     def get_all_users(self):
         return self.user_repo.get_all_users()
 
+    def create_user(self, username: str, password: str, role: str) -> None:
+        user = User(id=None, username=username, password=self._hash_password(password), role=Role(role))
+        self.user_repo.add_user(user)
+        EventBus.publish(UsuarioCriado(username=username, role=role))
+
+    def update_user(self, username: str, password: str, role: str) -> None:
+        user = User(id=None, username=username, password=self._hash_password(password), role=Role(role))
+        self.user_repo.update_user(user)
+
     def delete_user(self, username: str) -> None:
         self.user_repo.delete_user(username)
+        EventBus.publish(UsuarioRemovido(username=username))

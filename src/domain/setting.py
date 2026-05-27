@@ -1,8 +1,3 @@
-from dataclasses import dataclass
-from typing import Optional
+from .shared.setting import Setting
 
-@dataclass
-class Setting:
-    id: Optional[int]
-    key: str
-    value: str
+__all__ = ['Setting']

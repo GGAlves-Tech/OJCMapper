@@ -1,12 +1,3 @@
-from enum import Enum
+from .shared.value_objects import Role, ProjectType
 
-
-class Role(Enum):
-    GERENTE = 'Gerente'
-    EDITOR = 'Editor'
-    DEFAULT = 'Default'
-
-
-class ProjectType(Enum):
-    ONLINE = 'ONLINE'
-    GAVETA = 'GAVETA'
+__all__ = ['Role', 'ProjectType']
