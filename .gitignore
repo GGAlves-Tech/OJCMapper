@@ -15,3 +15,10 @@ database.db
 dist/
 build/
 *.spec
+
+# protótipo pitch (Vite)
+pitch-prototype/node_modules/
+pitch-prototype/dist/
+
+# logs demo
+logs_pitch/

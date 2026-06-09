@@ -3,11 +3,11 @@ from .projects.project import Project
 from .shared.setting import Setting
 from .shared.role import Role
 from .shared.project_type import ProjectType
-from .identity.interfaces import UserRepository
-from .shared.interfaces import SettingsRepository
+from .identity.user_repository import UserRepository
+from .shared.settings_repository import SettingsRepository
 from .projects.project_repository import ProjectRepository
 from .shared.filesystem_port import FileSystemPort
-from .drives.interfaces import DriveMapper
+from .drives.drive_mapper import DriveMapper
 from .shared.domain_event import DomainEvent
 from .shared.event_bus import EventBus
 from .identity.usuario_criado import UsuarioCriado

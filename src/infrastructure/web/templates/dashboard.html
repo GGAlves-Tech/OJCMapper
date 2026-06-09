@@ -274,25 +274,25 @@
                 });
 
                 if (drives.length === 0) {
-                    container.innerHTML = '<p class="text-slate-400 text-sm italic text-center py-4">Nenhuma unidade mapeada no momento.</p>';
+                    container.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400 italic">Nenhuma unidade mapeada no momento.</td></tr>';
                     return;
                 }
                 container.innerHTML = drives.map(d => {
                     const projectName = d.path.replace(/\\/g, '/').split('/').filter(Boolean).pop() || d.path;
                     const btn = document.querySelector(`[data-name="${projectName}"]`);
-                    const displayPath = btn ? btn.dataset.path : projectName;
+                    const displayPath = btn ? btn.dataset.path : d.path;
                     return `
-                    <div class="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
-                        <div>
-                            <span class="font-bold text-slate-800">${d.letter}:</span>
-                            <p class="text-xs font-mono text-slate-400 mt-0.5">${displayPath}</p>
-                        </div>
-                        <button onclick="disconnectDrive('${d.letter}', this)"
-                            class="text-xs text-red-500 font-medium hover:underline">Desconectar</button>
-                    </div>`;
+                    <tr class="hover:bg-blue-50/30 transition-colors">
+                        <td class="px-4 py-3 font-bold text-slate-800 whitespace-nowrap">${d.letter}:</td>
+                        <td class="px-4 py-3 text-xs font-mono text-slate-400 break-all">${displayPath}</td>
+                        <td class="px-4 py-3 text-right whitespace-nowrap">
+                            <button onclick="disconnectDrive('${d.letter}', this)"
+                                class="text-xs text-red-500 font-medium hover:underline">Desconectar</button>
+                        </td>
+                    </tr>`;
                 }).join('');
             } catch (e) {
-                container.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Erro ao carregar unidades.</p>';
+                container.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-red-400 text-sm">Erro ao carregar unidades.</td></tr>';
             }
         }
 
@@ -356,8 +356,21 @@
                         Desconectar Todas</button>
                 </div>
             </div>
-            <div id="unidades-list" class="p-6">
-                <p class="text-slate-400 text-sm italic text-center py-4">Carregando...</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-50/50 text-slate-500 font-medium border-b border-slate-200">
+                        <tr>
+                            <th class="px-4 py-3">Letra</th>
+                            <th class="px-4 py-3">Caminho</th>
+                            <th class="px-4 py-3 text-right">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unidades-list" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="3" class="px-4 py-8 text-center text-slate-400 italic">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
