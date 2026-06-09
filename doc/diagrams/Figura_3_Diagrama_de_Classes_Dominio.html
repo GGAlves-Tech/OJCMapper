@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figura 3 - Diagrama de Classes de Domínio</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --accent-color: #0969da;
+            --text-color: #1f2328;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05); /* Sombra sutil para tema claro */
+            width: min(96vw, 1200px);
+            max-width: 1200px;
+        }
+        /* Diagramas de classe costumam ser largos: rolagem horizontal em vez de cortar */
+        .mermaid-wrap {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            padding: 8px 0;
+        }
+        .mermaid-wrap .mermaid {
+            min-width: min(100%, 720px);
+        }
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+    </style>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            securityLevel: 'loose',
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#f1f8ff',
+                primaryTextColor: '#1f2328',
+                primaryBorderColor: '#0969da',
+                lineColor: '#6e7781',
+                secondaryColor: '#2da44e',
+                tertiaryColor: '#f6f8fa',
+                fontFamily: 'Segoe UI'
+            },
+            class: {
+                htmlLabels: true,
+                useMaxWidth: false
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Figura 3 - Diagrama de Classes de Domínio</h1>
+        <div class="mermaid-wrap">
+        <!-- Entidades alinhadas a src/domain/*.py; interfaces a src/domain/interfaces.py; SQLiteRepository a sqlite_repository.py -->
+        <div class="mermaid">
+            classDiagram
+                direction LR
+                class User {
+                    +int id
+                    +string username
+                    +string password
+                    +string role
+                }
+                class Project {
+                    +int id
+                    +string name
+                    +string type
+                    +string path
+                }
+                class Setting {
+                    +int id
+                    +string key
+                    +string value
+                }
+                class UserRepository {
+                    <<interface>>
+                    +get_by_username(username) User
+                    +get_all_users() List
+                    +add_user(user) void
+                    +update_user(user) void
+                    +delete_user(username) void
+                }
+                class SettingsRepository {
+                    <<interface>>
+                    +get_all_settings() dict
+                    +update_setting(key value) void
+                }
+                class ProjectRepository {
+                    <<interface>>
+                    +get_projects_by_type(project_type) List
+                    +delete_project(project_id) void
+                }
+                class SQLiteRepository {
+                    -string db_path
+                }
+                UserRepository ..> User
+                ProjectRepository ..> Project
+                SettingsRepository ..> Setting
+                SQLiteRepository ..|> UserRepository
+                SQLiteRepository ..|> SettingsRepository
+                SQLiteRepository ..|> ProjectRepository
+        </div>
+        </div>
+    </div>
+</body>
+</html>

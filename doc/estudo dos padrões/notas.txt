@@ -1,0 +1,9 @@
+● Padrão               | Conceito aplicado                                    | Referência
+  ---------------------|------------------------------------------------------|--------------------------------------------------------------
+  Evans (DDD)          | conceito de Domain Event e imutabilidade             | Domain-Driven Design — Eric Evans, cap. 8 (Domain Events)
+  GoF Observer         | notificação desacoplada de múltiplos handlers        | https://refactoring.guru/design-patterns/observer
+  GoF Mediator         | EventBus como intermediário central                  | https://refactoring.guru/design-patterns/mediator
+  Cockburn Hexagonal   | eventos sem dependência de infraestrutura            | https://alistair.cockburn.us/hexagonal-architecture/
+  Vernon (IDDD)        | eventos organizados por Bounded Context              | Implementing DDD — Vaughn Vernon, cap. 8 (Domain Events)
+  Tell Don't Ask       | use case anuncia fatos, não gerencia reações         | https://martinfowler.com/bliki/TellDontAsk.html
+  Pragmatic Programmer | diga ao objeto o que aconteceu, não pergunte estado  | The Pragmatic Programmer — Hunt & Thomas, cap. 5 (Decoupling)

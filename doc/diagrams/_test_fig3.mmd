@@ -1,0 +1,46 @@
+classDiagram
+    direction LR
+    class User {
+        +int id
+        +string username
+        +string password
+        +string role
+    }
+    class Project {
+        +int id
+        +string name
+        +string type
+        +string path
+    }
+    class Setting {
+        +int id
+        +string key
+        +string value
+    }
+    class UserRepository {
+        <<interface>>
+        +get_by_username(username) User
+        +get_all_users() List
+        +add_user(user) void
+        +update_user(user) void
+        +delete_user(username) void
+    }
+    class SettingsRepository {
+        <<interface>>
+        +get_all_settings() dict
+        +update_setting(key value) void
+    }
+    class ProjectRepository {
+        <<interface>>
+        +get_projects_by_type(project_type) List
+        +delete_project(project_id) void
+    }
+    class SQLiteRepository {
+        -string db_path
+    }
+    UserRepository ..> User
+    ProjectRepository ..> Project
+    SettingsRepository ..> Setting
+    SQLiteRepository ..|> UserRepository
+    SQLiteRepository ..|> SettingsRepository
+    SQLiteRepository ..|> ProjectRepository

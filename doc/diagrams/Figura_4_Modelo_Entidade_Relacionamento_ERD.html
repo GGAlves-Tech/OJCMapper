@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figura 4 - Modelo de Entidade Relacionamento (ERD)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --accent-color: #0969da;
+            --text-color: #1f2328;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05); /* Sombra super sutil para fundo claro */
+            width: 90%;
+            max-width: 1000px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        .legenda {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            font-size: 0.875rem;
+            line-height: 1.55;
+            color: #57606a;
+            text-align: left;
+        }
+        .legenda strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+    </style>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            securityLevel: 'loose', // Permite injeção de HTML e SVGs
+            theme: 'default', // Tema oficial claro
+            themeVariables: {
+                primaryColor: '#f1f8ff',
+                primaryTextColor: '#1f2328',
+                primaryBorderColor: '#0969da',
+                lineColor: '#6e7781',
+                secondaryColor: '#2da44e',
+                tertiaryColor: '#f6f8fa',
+                fontFamily: 'Segoe UI'
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- ERD alinhado ao DDL em src/infrastructure/persistence/sqlite_repository.py (_init_db). Sem FKs entre tabelas. -->
+    <div class="container">
+        <h1>Figura 4 - Modelo de Entidade Relacionamento (ERD)</h1>
+        <div class="mermaid">
+            erDiagram
+                users {
+                    int id PK
+                    string username UK
+                    string password
+                    string role
+                }
+                settings {
+                    int id PK
+                    string key UK
+                    string value
+                }
+                projects {
+                    int id PK
+                    string name
+                    string type
+                    string path
+                }
+        </div>
+        <p class="legenda"><strong>Legenda:</strong> diagrama em notação entidade–atributo alinhado ao esquema físico SQLite criado em <code>sqlite_repository.py</code> (<code>_init_db</code>). As tabelas <code>users</code>, <code>settings</code> e <code>projects</code> são independentes: o DDL atual não define chaves estrangeiras nem relacionamentos entre entidades. <strong>PK</strong> — chave primária; <strong>UK</strong> — restrição de unicidade.</p>
+    </div>
+</body>
+</html>
